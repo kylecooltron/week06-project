@@ -1,0 +1,36 @@
+/* HTML Selectors */
+
+body {
+    font-family: 'Kalam', cursive;
+    background-color: gray;
+}
+
+footer {
+    background-color: gray;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}
+
+header {
+    margin: auto;
+    text-align: center;
+}
+
+main {
+    text-align: center;
+}
+
+
+/* Media Queries */
+@media only screen and (min-width: 32.5em) {
+
+}
+
+@media only screen and (min-width: 64em) {
+
+}
+
+canvas {
+    border: 2px solid black;
+}
