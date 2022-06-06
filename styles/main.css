@@ -26,6 +26,9 @@ main {
     height: 400px;
     border: 1px solid red;
 }
+.canvas-container1 canvas{
+    width:100%;
+}
 
 /* Media Queries */
 @media only screen and (min-width: 32.5em) {
