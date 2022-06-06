@@ -14,28 +14,6 @@ Author: Kyle Coulon 2022
   //amount drawn each frame in pixels
   let draw_speed = 1;
 
-
-  function elementInViewport(el) {
-    var top = el.offsetTop;
-    var left = el.offsetLeft;
-    var width = el.offsetWidth;
-    var height = el.offsetHeight;
-  
-    while(el.offsetParent) {
-      el = el.offsetParent;
-      top += el.offsetTop;
-      left += el.offsetLeft;
-    }
-  
-    return (
-      top < (window.pageYOffset + window.innerHeight) &&
-      left < (window.pageXOffset + window.innerWidth) &&
-      (top + height) > window.pageYOffset &&
-      (left + width) > window.pageXOffset
-    );
-  }
-
-
   /* DO DRAW UPDATES EACH FRAME */
   function do_draw_updates() {
 
@@ -165,6 +143,27 @@ Author: Kyle Coulon 2022
   readJsonFile('paths');
 
 
+
+  /* elementInViewport was submitted to a forum by @Prestaul - Sep 24, 2008
+  https://stackoverflow.com/questions/123999/how-can-i-tell-if-a-dom-element-is-visible-in-the-current-viewport */
+  //check if an element is visible to the viewport
+  function elementInViewport(el) {
+    var top = el.offsetTop;
+    var left = el.offsetLeft;
+    var width = el.offsetWidth;
+    var height = el.offsetHeight;
+    while(el.offsetParent) {
+      el = el.offsetParent;
+      top += el.offsetTop;
+      left += el.offsetLeft;
+    }
+    return (
+      top < (window.pageYOffset + window.innerHeight) &&
+      left < (window.pageXOffset + window.innerWidth) &&
+      (top + height) > window.pageYOffset &&
+      (left + width) > window.pageXOffset
+    );
+  }
 
 
 
