@@ -2,7 +2,8 @@
 
 body {
     font-family: 'Kalam', cursive;
-    background-color: gray;
+    background-color: black;
+    color: white;
 }
 
 footer {
@@ -21,6 +22,10 @@ main {
     text-align: center;
 }
 
+.spacer{
+    height: 400px;
+    border: 1px solid red;
+}
 
 /* Media Queries */
 @media only screen and (min-width: 32.5em) {

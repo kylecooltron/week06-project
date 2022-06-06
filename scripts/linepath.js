@@ -10,12 +10,25 @@ window.onload=function(){
   //reused variables
   let this_ctx;
 
+  //amount drawn
+  let draw_dist = 0;
+  let draw_speed_multiplier = 8;
+  //reused
+  let startx;
+  let starty;
+  let nextx;
+  let nexty;
+
   //do updates
   function do_updates() {
     //code here
 
     //draw on canvas's
     if(canvas_list.length > 0){
+
+      //speed at which lines draw out
+      draw_dist += draw_speed_multiplier+0.5;
+      draw_speed_multiplier *= 0.98;
 
         //for every canvas in the canvas list
         for (var i = 0; i < canvas_list.length; i++) {
@@ -24,23 +37,113 @@ window.onload=function(){
           this_ctx = canvas_list[i][0].getContext("2d");
           //set the correct drawing color
           this_ctx.strokeStyle = canvas_list[i][1];
+          //this_ctx.lineWidth = 0.01;
           //set the starting position for a line
           this_ctx.beginPath();
+          let canv_width = canvas_list[i][0].width;
+          let canv_height = canvas_list[i][0].height;
 
-            //for every path of this canvas
+            /* SIMLY DRAW ALL LINES
+            //for every path of this canvas 
             for (var j = 0; j < canvas_list[i][2].length; j++) {
 
               //set starting draw position
-              this_ctx.moveTo(canvas_list[i][2][j][0][0], canvas_list[i][2][j][0][1]);
+              this_ctx.moveTo(canvas_list[i][2][j][0][0] * canv_width, canvas_list[i][2][j][0][1] * canv_height);
 
                 //for every set of points in this individual path
                 for (var k = 0; k < canvas_list[i][2][j].length; k++) {   
                   //draw a line to next point
-                  this_ctx.lineTo(canvas_list[i][2][j][k][0], canvas_list[i][2][j][k][1]);
+                  this_ctx.lineTo(canvas_list[i][2][j][k][0] * canv_width, canvas_list[i][2][j][k][1] * canv_height);
+                  this_ctx.stroke();
+                }
+
+                //set starting draw position
+                this_ctx.moveTo((canvas_list[i][2][j][0][0] * -canv_width) +canv_width, canvas_list[i][2][j][0][1] * canv_height);
+
+                //for every set of points in this individual path
+                for (var k = 0; k < canvas_list[i][2][j].length; k++) {   
+                  //draw a line to next point
+                  this_ctx.lineTo((canvas_list[i][2][j][k][0] * -canv_width) +canv_width, canvas_list[i][2][j][k][1] * canv_height);
                   this_ctx.stroke();
                 }
 
             }
+            */
+
+            //TEST WITH DRAWING PROGRESSIVELY
+            
+                        //for every path of this canvas
+                        for (var j = 0; j < canvas_list[i][2].length; j++) {
+                          
+                          startx = canvas_list[i][2][j][0][0] * canv_width;
+                          starty = canvas_list[i][2][j][0][1] * canv_height;
+                          //set starting draw position
+                          this_ctx.moveTo(startx,starty);
+            
+                          //set at starting amount for next line path
+                          let dist_left_to_draw = draw_dist;
+
+                            //for every set of points in this individual path
+                            for (var k = 0; k < canvas_list[i][2][j].length; k++) {  
+
+                              //if we still have some distance to go for this path
+                              if(dist_left_to_draw > 0){
+                              
+                              
+                              nextx = canvas_list[i][2][j][k][0] * canv_width;
+                              nexty = canvas_list[i][2][j][k][1] * canv_height;
+                              
+                              let difference = Math.abs(startx-nextx) + Math.abs(starty-nexty);
+
+                              if(dist_left_to_draw > difference){
+                                dist_left_to_draw -= difference;
+                                //this line has already been drawn
+                                this_ctx.moveTo(nextx,nexty);
+                              }else{
+                                if(startx != nextx){
+                                  //x line
+                                  if(nextx > startx){
+                                    //positive difference
+                                    nextx = startx + dist_left_to_draw;
+                                  }else{
+                                    //negative difference
+                                    nextx = startx - dist_left_to_draw;
+                                  }
+                                }else{
+                                  //y line
+                                  if(nexty > starty){
+                                    //positive difference
+                                    nexty = starty + dist_left_to_draw;
+                                  }else{
+                                    //negative difference
+                                    nexty = starty - dist_left_to_draw;
+                                  }
+                                }
+                              //DRAW RIGHT SIDE
+                              this_ctx.moveTo(startx,starty);
+                              //draw a line with the distance we have left
+                              this_ctx.lineTo(nextx,nexty);
+                              this_ctx.stroke();
+                              //DRAW MIRROR LEFT
+                              this_ctx.moveTo(-startx+canv_width,starty);
+                              //draw a line with the distance we have left
+                              this_ctx.lineTo(-nextx+canv_width,nexty);
+                              this_ctx.stroke();
+                              
+                              //we've used up the rest
+                              dist_left_to_draw = 0;
+                              }
+                              //set up for measuring distance next frame
+                              startx = nextx;
+                              starty = nexty;
+                            }
+
+                            }
+
+                            
+            
+                        }
+
         }
 
 
@@ -102,6 +205,8 @@ window.onload=function(){
     //returns a reference to canvas
     return this_canvas;
   }
+
+
 
 /* code for making test json point data
   function getPos(el) {
