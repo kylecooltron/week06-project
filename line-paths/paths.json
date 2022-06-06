@@ -292,7 +292,7 @@
            {
             "backcolor": "black",
             "linecolor": "white",
-            "width": 1400,
+            "width": 1800,
             "height": 400,
             "element": ".canvas-container",
             "paths": 
