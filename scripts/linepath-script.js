@@ -19,7 +19,7 @@ Author: Kyle Coulon 2022
 
     //if there is at least one canvas
     if(canvas_list.length > 0){
-      console.log(window.scrollY);
+      
         //for every canvas in the canvas list
         for (var i = 0; i < canvas_list.length; i++) {
 
